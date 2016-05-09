@@ -2,9 +2,6 @@ package net.multiplesocket
 
 import org.zeromq.ZMQ
 
-/**
-  * Created by kmmere on 5/8/16.
-  */
 object MultipleSocketPoller {
 
   def main(args: Array[String]): Unit = {
