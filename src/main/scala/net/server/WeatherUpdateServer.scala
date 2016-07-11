@@ -28,6 +28,9 @@ object  WeatherUpdateServer {
       val temperature: Integer = srandom.nextInt(215) - 80 + 1
       val relhumidity: Integer = srandom.nextInt(50) + 10 + 1
 
+      if(zipcode == 10001)
+        println(s"sending zip: ${zipcode}, temperature: ${temperature}")
+
       //  Send message to all subscribers
       val update = String.format("%05d %d %d\u0000", zipcode, temperature, relhumidity);
       publisher.send(update.getBytes(), 0)

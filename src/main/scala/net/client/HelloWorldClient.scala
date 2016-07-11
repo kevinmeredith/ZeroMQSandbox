@@ -28,16 +28,16 @@ object HelloWorldClient{
       //  Ensure that the last byte of our "Hello" message is 0 because
       //  our "Hello World" server is expecting a 0-terminated string:
             val request = "Hello ".getBytes()
-      request(request.length-1)=0 //Sets the last byte to 0
-      // Send the message
-      println("Sending request " + request_nbr + "…") + request.toString
-      socket.send(request, 0)
+          request(request.length-1)=0 //Sets the last byte to 0
+          // Send the message
+          println("Sending request " + request_nbr + "…") + request.toString
+          socket.send(request, 0)
 
-      //  Get the reply.
-      val reply = socket.recv(0)
-      //  When displaying reply as a String, omit the last byte because
-      //  our "Hello World" server has sent us a 0-terminated string:
-      println("Received reply " + request_nbr + ": [" + new String(reply,0,reply.length-1) + "]")
+          //  Get the reply.
+          val reply = socket.recv(0)
+          //  When displaying reply as a String, omit the last byte because
+          //  our "Hello World" server has sent us a 0-terminated string:
+          println("Received reply " + request_nbr + ": [" + new String(reply,0,reply.length-1) + "]")
     }
   }
 }

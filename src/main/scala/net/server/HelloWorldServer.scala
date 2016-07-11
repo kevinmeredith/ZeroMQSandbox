@@ -18,7 +18,7 @@ object HelloWorldServer {
     //  Prepare our context and socket
     val context = ZMQ.context(1)
     val socket = context.socket(ZMQ.REP)
-        println ("starting")
+    println ("starting")
     socket.bind ("tcp://*:5555")
 
     while (true) {

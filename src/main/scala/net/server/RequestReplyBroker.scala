@@ -16,7 +16,7 @@ object RequestReplyBroker {
     System.out.println("launch and connect broker.")
 
     //  Initialize poll set
-    val items = context.poller(2)
+    val items = context.poller()
     items.register(frontend, 1)
     items.register(backend, 1)
 

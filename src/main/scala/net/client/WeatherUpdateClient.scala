@@ -31,9 +31,11 @@ object WeatherUpdateClient {
     for (i <- 1 to update_nbr ) {
       //  Use trim to remove the tailing '0' character
       val sscanf = new String(subscriber.recv(0)).trim.split(' ').map(_.toInt)
+      println("sscanf: "+  sscanf.toString)
       val zipcode = sscanf(0)
       val temperature = sscanf(1)
       val relhumidity = sscanf(2)
+      println(s"zip: ${zipcode}, temp: ${temperature}")
       total_temp += temperature
     }
     println("Average temperature for zipcode '" + filter + "' was " +  (total_temp / update_nbr))
