@@ -34,7 +34,7 @@ object RouterToReq {
     val workers = List.fill(NBR_WORKERS)(new Thread(new WorkerTask))
     workers.foreach (_.start)
 
-    for (i <- 1 to NBR_WORKERS * 10) {
+    for (i <- 1 to (NBR_WORKERS * 10)) {
       // LRU worker is next waiting in queue
       val address = client.recv(0)
       val empty = client.recv(0)
@@ -45,14 +45,14 @@ object RouterToReq {
       client.send("This is the workload".getBytes, 0)
     }
 
-      for (i <- 1 to NBR_WORKERS) {
-        val address = client.recv(0)
-        val empty = client.recv(0)
-        val ready = client.recv(0)
+    for (i <- 1 to NBR_WORKERS) {
+      val address = client.recv(0)
+      val empty = client.recv(0)
+      val ready = client.recv(0)
 
-        client.send(address, ZMQ.SNDMORE)
-        client.send("".getBytes, ZMQ.SNDMORE)
-        client.send("END".getBytes, 0)
-      }
+      client.send(address, ZMQ.SNDMORE)
+      client.send("".getBytes, ZMQ.SNDMORE)
+      client.send("END".getBytes, 0)
     }
+  }
 }

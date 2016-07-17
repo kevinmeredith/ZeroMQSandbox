@@ -26,8 +26,10 @@ object RouterToDealer {
 
       @tailrec
       def workUntilEndMsg(total: Int, workload: String): Unit = {
-        if(workload == "END")
+        if(workload == "END") {
+          println(s"Worker $name is shutting down. Received a total of $total messages")
           ()
+        }
         else {
           val wl = new String(socket.recv(NOFLAGS))
           println(s"Worker $name received message: $wl")
@@ -56,7 +58,6 @@ object RouterToDealer {
     println("Workers started, sleeping 1 second for warmup.")
     Thread.sleep(1000)
 
-    // send 10 tasks, scattered to A twice as often as to B
     for(i <- 1 to 10) {
       val address = if (rand.nextInt() % 2 == 0) "B".getBytes else "A".getBytes
       socket.send(address, ZMQ.SNDMORE)
