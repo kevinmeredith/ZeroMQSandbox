@@ -70,8 +70,8 @@ object LruQueue   {
 
     //  Worker using REQ socket to do LRU routing
     //
-    val NBR_CLIENTS = 1 // 10
-    val NBR_WORKERS = 1 //3
+    val NBR_CLIENTS = 10
+    val NBR_WORKERS = 3
 
     //  Prepare our context and sockets
     val ctx      = ZMQ.context(1)
