@@ -27,7 +27,7 @@ class ClientTask(name: String) extends Runnable {
     //  Send request, get reply
     client.send("HELLO".getBytes, 0)
     val reply = client.recv(0)
-    println(s"Client received: ${new String(reply)}")
+    println(s" received: ${new String(reply)}")
   }
 }
 
@@ -130,7 +130,7 @@ object LruQueue   {
         //  Third frame is READY or else a client reply address
         val clientAddr = backend.recv(NOFLAGS)
 
-        println(s"Back-end: cliendAddr: ${new String(clientAddr)}")
+        println(s"Back-end: clientAddr: ${new String(clientAddr)}")
 
         if (new String(clientAddr).equals("READY")) {
           println("Backend: received 'READY'.")
