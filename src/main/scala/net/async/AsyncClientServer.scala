@@ -57,7 +57,7 @@ object AsyncClientServer {
   def main(args: Array[String]): Unit = {
     router.bind(s"tcp://*:$Port")
     new Thread(new Client("JOE")).start()
-    new Thread(new Client("JILL")).start()
+    //new Thread(new Client("JILL")).start()
     mainHelper(Set.empty)
   }
 
