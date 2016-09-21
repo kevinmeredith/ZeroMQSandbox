@@ -9,8 +9,7 @@ class Worker(name: String) extends Runnable {
   import DealerToDealer._
 
   val WorkerResponse = "Foo!".getBytes
-
-  val id = name.getBytes
+  val id             = name.getBytes
 
   override def run(): Unit =
     runIO.unsafePerformIO()
@@ -24,13 +23,15 @@ class Worker(name: String) extends Runnable {
   } yield ()
 
   private def runIOHelper(worker: Socket): IO[Unit] = for {
-    _   <- IO.putStrLn(s"Worker ${name}: sending Empty + ${show(WorkerResponse)}")
-    _   <- IO { worker.send(Empty, ZMQ.SNDMORE) }
-    _   <- IO { worker.send(WorkerResponse, 0) }
-    _   <- IO.putStrLn(s"Worker ${name}: sent")
-    msg <- IO { show(worker.recv(0)) }
-    _   <- IO.putStrLn(s"Worker ${show(worker.getIdentity)}: received message: $msg.")
-    _   <- runIOHelper(worker)
+    _     <- IO.putStrLn(s"Worker ${name}: sending Empty + ${show(WorkerResponse)}")
+    _     <- IO { worker.send(Empty,          ZMQ.SNDMORE) }
+    _     <- IO { worker.send(WorkerResponse, 0) }
+    _     <- IO.putStrLn(s"Worker ${name}: sent")
+    empty <- IO { show(worker.recv(0)) }
+    _     <- IO.putStrLn(s"Worker ${show(worker.getIdentity)}: received message: $empty.")
+    msg   <- IO { show(worker.recv(0)) }
+    _     <- IO.putStrLn(s"Worker ${show(worker.getIdentity)}: received message: $msg.")
+    _     <- runIOHelper(worker)
   } yield ()
 }
 
@@ -39,12 +40,10 @@ object DealerToDealer {
   def show(xs: Array[Byte]): String =
     new String(xs)
 
-  val Port = 5555
-
-  val Empty = "".getBytes
-
+  val Port          = 5555
+  val Empty         = "".getBytes
   val WorkerMessage = "Bar!".getBytes
-  val WorkLimit = 25
+  val WorkLimit     = 25
 
   def main(xs: Array[String]): Unit =
     mainIO().unsafePerformIO()
@@ -52,8 +51,8 @@ object DealerToDealer {
   def mainIO(): IO[Unit] = for {
     context <- IO { ZMQ.context(1) }
     server  <- IO { context.socket(ZMQ.DEALER) }
-    _       <- IO { new Thread(new Worker("Bob")).run() }
     _       <- IO { server.bind(s"tcp://*:$Port") }
+    _       <- IO { new Thread(new Worker("Bob")).run() }
     _       <- runHelper(server, 0)
   } yield ()
 
@@ -63,13 +62,15 @@ object DealerToDealer {
     }
     else {
       for {
-        _   <- IO.putStrLn(s"SERVER: sending Empty + ${show(WorkerMessage)}.")
-        _   <- IO { server.send(Empty, ZMQ.SNDMORE) }
-        _   <- IO { server.send(WorkerMessage, 0) }
-        _   <- IO.putStrLn(s"SERVER: sent")
-        msg <- IO { server.recv(0) }
-        _   <- IO.putStrLn(s"SERVER: received message: ${show(msg)}.")
-        _   <- runHelper(server, sent + 1)
+        empty <- IO { server.recv(0) }
+        _     <- IO.putStrLn(s"SERVER: received message: ${show(empty)}.")
+        msg   <- IO { server.recv(0) }
+        _     <- IO.putStrLn(s"SERVER: received message: ${show(msg)}.")
+        _     <- IO.putStrLn(s"SERVER: sending Empty + ${show(WorkerMessage)}.")
+        _     <- IO { server.send(Empty,         ZMQ.SNDMORE) }
+        _     <- IO { server.send(WorkerMessage, 0) }
+        _     <- IO.putStrLn(s"SERVER: sent")
+        _     <- runHelper(server, sent + 1)
       } yield ()
     }
   }
